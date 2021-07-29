@@ -4,7 +4,13 @@ class Course(models.Model):
     title = models.CharField(max_length=100)
     credits = models.IntegerField()
 
+    def __str__(self) -> str:
+        return self.title
+
 
 class Student(models.Model):
     student_name = models.CharField(max_length=255)
-    courses = models.ManyToManyField(related_name='students')
+    courses = models.ManyToManyField(Course, related_name='students')
+
+    def __str__(self) -> str:
+        return self.student_name
