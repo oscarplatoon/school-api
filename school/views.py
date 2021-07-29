@@ -97,4 +97,21 @@ def delete_course(request, course_id):
     if request.method == "POST":
         course=get_course(course_id)
         course.delete()
-        return(JsonResponse(data={'status':'Successfully Deleted course'}, status=200))
+    return(JsonResponse(data={'status':'Successfully Deleted course'}, status=200))
+
+@csrf_exempt
+def add_student(request, course_id, student_id):
+    if request.method == "POST":
+        student = get_student(student_id)
+        course_to_add = get_course(course_id)
+        student.courses.add(course_to_add)
+    return(JsonResponse(data={'status':'Successfully added student to course'}, status=200))
+
+
+@csrf_exempt
+def remove_student(request, course_id, student_id):
+    if request.method == "POST":
+        student = get_student(student_id)
+        course_to_remove = get_course(course_id)
+        student.courses.remove(course_to_remove)
+    return(JsonResponse(data={'status':'Successfully removed student from the course'}, status=200))
