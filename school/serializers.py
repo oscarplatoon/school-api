@@ -1,77 +1,23 @@
-from builtins import object
+from rest_framework import serializers
+from .models import Student, Course
+
+# depth = 1 for the models
+# Includes the serialized output of the courses to which the student is enrolled
+# (makes the json object contain *all* the data)
+
+class StudentSerializer(serializers.ModelSerializer):
+    # If you only want limited data passed, you can use this to pass the title
+    # __str__ method for the related model.
+    # courses = serializers.StringRelatedField(many=True)
+    class Meta:
+        model = Student
+        fields = ['id', 'student_name', 'courses']
+        depth = 1
 
 
-class StudentSerializer(object):
-    def __init__(self, data) -> None:
-        self.data = data
-
-    @property
-    def all_students(self):
-        output = {'students':[], 'courses':[]}
-
-        for student in self.data:
-            student_detail={
-                'student_name':student.student_name,
-                'courses': []
-            }
-            for course in student.courses.all():
-                course_detail={
-                    'title':course.title,
-                    'credits': course.credits
-                }
-                student_detail['courses'].append(course_detail)
-            output['students'].append(student_detail)
-            print(output)
-        return output
-
-    @property
-    def student_detail(self):
-        output = {
-            'student_name':self.data.student_name,
-            'courses': []
-        }
-        print(self.data.courses)
-        for course in self.data.courses.all():
-            course_detail={
-                'title':course.title
-            }
-            output['courses'].append(course_detail)
-        return output
-
-
-class CourseSerializer(object):
-    def __init__(self, data) -> None:
-        self.data = data
-
-    @property
-    def all_courses(self):
-        output = {'courses':[]}
-
-        for course in self.data:
-            course_detail={
-                'title':course.title,
-                'credits': course.credits,
-                'students': []
-            }
-            for student in course.students.all():
-                student_detail= {
-                    "student_name": student.student_name
-                }
-                course_detail['students'].append(student_detail)
-            output['courses'].append(course_detail)
-        return output
-
-    @property
-    def course_detail(self):
-        output = {
-            'title':self.data.title,
-            'credits': self.data.credits,
-            'students': []
-        }
-        for student in self.data.students.all():
-            student_detail = {
-                'student_name':student.student_name
-            }
-            output['students'].append(student_detail)
-        print(output)
-        return output
+class CourseSerializer(serializers.ModelSerializer):
+    # students = serializers.StringRelatedField(many=True)
+    class Meta:
+        model = Course
+        fields = ['id', 'title', 'credits', 'students']
+        depth = 1
