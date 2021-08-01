@@ -5,12 +5,12 @@ from .models import Course
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['name', 'age', 'courses']
+        fields = ['id', 'name', 'age', 'courses']
         depth = 1
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['title', 'description', 'credits', 'students']
+        fields = ['id', 'title', 'description', 'credits', 'students']
         depth = 1
         
